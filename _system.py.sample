@@ -1,0 +1,6 @@
+global db
+
+# mongo
+from pymongo import MongoClient
+client = MongoClient('db_uri', 27017, username="db_user", password="db_password")
+db = client.mydevday

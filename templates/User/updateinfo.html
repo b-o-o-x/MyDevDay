@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <!--    구글 폰트-->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100&family=Poppins:wght@100;300;500&display=swap"
+          rel="stylesheet">
+    <!--    JQuery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <!-- jQuery cookie 함수-->
+    <title>MyDevDay | Edit</title>
+    <!--    css-->
+    <link rel="stylesheet" href="/static/css/User/signup.css">
+
+</head>
+
+<body>
+<div class="container">
+    <div class="imgBox">
+        <div class="titleBox">
+            <img src="/static/css/User/image/logo.png" id="logoimg">
+            <h1 id="title"><a href="/">MyDevDay</a></h1>
+        </div>
+        <img src="/static/css/User/image/diary.jpg" id="diaryimg">
+    </div>
+    <div class="signForm">
+        <h2 id="inputTitle">Edit member information</h2>
+        <div class="inputBox">
+            <h3 id="inname">Name<span class="error nameError"></span></h3>
+            <input id="nameInput" type="text" placeholder="Name" maxlength="10" value="{{ name }}">
+            <h3 id="ingoal">My Goal<span class="error goalError"></span></h3>
+            <input id="goalInput" type="text" placeholder="My Goal" maxlength="25" value="{{ goal }}">
+            {#            <h3 id="inemail">E-mail<span class="error emailError"></span></h3>#}
+            {#            <input id="emailInput" type="text" placeholder="E-mail" maxlength="25" value="{{ email }}">#}
+            {#            <select id="domainBox">#}
+            {#                <option value="{{ domain }}">{{ domain }}</option>#}
+            {#                <option value="@naver.com">@naver.com</option>#}
+            {#                <option value="@gmail.com">@gmail.com</option>#}
+            {#                <option value="@daum.com">@daum.net</option>#}
+            {#                <option value="@hanmail.net">@hanmail.net</option>#}
+            {#                <option value="@kakao.com">@kakao.com</option>#}
+            {#                <option value="@tistory.com">@tistory.com</option>#}
+            {#                <option value="">직접입력</option>#}
+            {#            </select>#}
+
+            <button id="saveBtn" onclick="update()">Edit</button>
+        </div>
+        <div class="pageMove">
+            <p>수정할 내용이 없으신가요? <a href="/"> 메인 화면으로</a></p>
+        </div>
+    </div>
+</div>
+
+<script src="/static/js/User/imgchange.js"></script>
+<script>
+    $(document).ready(function () {
+    });
+
+
+    let name = $("#nameInput")
+    let goal = $("#goalInput")
+    {#let email = $("#emailInput")#}
+
+
+    function update() {
+        {#한글, 영문 대소문자 2-10글자#}
+        {#1-25글자 제한#}
+        {#영문 대소문자, 숫자 4-15글자#}
+
+        let namecheck = /^[가-힣a-zA-Z]{2,10}$/
+        let goalcheck = /^(?=.{1,25}$).*/
+        {#let emailcheck = /^[a-zA-Z0-9@.]{4,25}$/;#}
+
+        let inputlist = [name, goal]
+        let errorlist = [$(".nameError"), $(".goalError")]
+        let valcheck = [namecheck, goalcheck]
+        let checkmsg = [' 한글, 영문 대소문자 2-10글자 ', ' 1-25글자 ']
+
+        // 입력창 공백 여부 유효성 검사
+        for (let i = 0; i < inputlist.length; i++) {
+            if (inputlist[i].val() == "") {
+                inputlist[i].focus()
+                errorlist[i].text(" 입력해주세요")
+                return false;
+            } else {
+                errorlist[i].text("")
+            }
+            if (!valcheck[i].test(inputlist[i].val())) {
+                inputlist[i].focus()
+                errorlist[i].text(checkmsg[i] + '로 입력해주세요')
+                return false;
+            } else {
+                errorlist[i].text("")
+            }
+        }
+
+        /*
+        let emailcheck2 = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+        if (!emailcheck2.test(email.val() + $("#domainBox").val())) {
+            email.focus()
+            $(".emailError").text(" 형식이 맞지 않음.")
+            return false;
+        } else
+            }
+                    $(".emailError").text("")
+                }
+         */
+        if (confirm("정보를 수정하시겠습니까?")) {
+            // 정보 수정 요청
+            $.ajax({
+                type: "POST",
+                url: "/user/update/data",
+                data: {
+                    name_give: name.val(),
+                    goal_give: goal.val()
+                },
+                success: function (response) {
+                    console.log(response)
+                    alert(response['msg'])
+                    window.location.href = "/"
+                }
+            })
+        } else {
+            return false;
+        }
+
+    }
+
+</script>
+</body>
+
+</html>
