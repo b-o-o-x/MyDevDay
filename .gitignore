@@ -1,4 +1,6 @@
 __pycache__
 _system.py
+.idea/
 pymon.py
 pymon_kill.py
+app_sample_*.py

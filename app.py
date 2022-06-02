@@ -3,6 +3,7 @@ from app_devday import devday
 from app_user import user
 from app_mydev import mydev
 
+# port
 port = 8899
 
 # Flask로 app 객체 선언 및 blueprint로 개별 파일 연동
